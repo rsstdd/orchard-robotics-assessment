@@ -8,6 +8,8 @@ import decimal
 
 app = Flask(__name__)
 
+health_status = True
+
 CORS(
     app,
     methods=['GET', 'OPTIONS'],
@@ -36,6 +38,17 @@ def execute_query(sql, params=None):
     finally:
         cursor.close()
         conn.close()
+
+@app.route('/health')
+def health():
+    if health_status:
+        resp = jsonify(health="healthy")
+        resp.status_code = 200
+    else:
+        resp = jsonify(health="unhealthy")
+        resp.status_code = 500
+
+    return resp
 
 @app.route('/api/scans', methods=['OPTIONS'])
 def handle_preflight():
