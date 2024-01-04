@@ -10,8 +10,9 @@ app = Flask(__name__)
 
 CORS(
     app,
-    methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    resources={r"/api/*": {"origins": "http://localhost:3000"}}
+    methods=['GET', 'OPTIONS'],
+    origins=['http://localhost:3000', 'https://or-client-d4kjq3uwba-uw.a.run.app', 'https://client-service-d4kjq3uwba-uw.a.run.app'],
+    resources={r"/api/*": {"origins": ['http://localhost:3000', 'https://or-client-d4kjq3uwba-uw.a.run.app', 'https://client-service-d4kjq3uwba-uw.a.run.app']}}
 )
 
 load_dotenv()
