@@ -21,33 +21,22 @@ Update the PostgreSQL connection details in the script.
 
 ```bash
 git clone https://github.com/your-username/your-repo.git
-Navigate to the project directory:
 ```
 2. Navigate to the project directory:
 
 ```bash
 cd your-repo
-Modify the CSV file:
 ```
 
 3. Update the CSV file (e.g., your_modified_file.csv) with the scan data you want to import. Ensure that the file includes columns for latitude, longitude, measurement values, and the date of the scan.
-
-4. Update PostgreSQL connection details:
-
-Open the main.rs file and update the PostgreSQL connection details:
-
-```rust
-let mut client = Client::connect("postgresql://your_username:your_password@localhost/your_database", NoTls)?;
-Replace your_username, your_password, and your_database with your actual PostgreSQL credentials and database name.
-```
-
+4. Update PostgreSQL connection details via `.env` files
 5. Run the script:
 
 ```bash
 cargo run
 ```
 
-The script will read data from the modified CSV file, calculate average size and diameter, and insert the data into the PostgreSQL database.
+The script will read data from the CSV file, calculate average size and diameter, and insert the data into the PostgreSQL database.
 
 6. Verify the data:
   - Connect to your PostgreSQL database and check the scans table to verify that the data has been successfully imported.

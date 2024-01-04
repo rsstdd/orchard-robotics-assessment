@@ -18,8 +18,28 @@ struct Scan {
     volume: String,
 }
 
-const DATABASE_URL_DEFAULT: &str = "default_value";
+const DB_URL_DEFAULT: &str = "default_value";
 
+
+/// Calculate the starting volume based on major, minor, and subminor dimensions.
+///
+/// # Arguments
+///
+/// * `major` - The major dimension of the ellipsoid.
+/// * `minor` - The minor dimension of the ellipsoid.
+/// * `subminor` - The subminor dimension of the ellipsoid.
+///
+/// # Returns
+///
+/// Returns the calculated starting volume using the formula for an ellipsoid:
+/// `Volume = (4/3) * π * major * minor * subminor`.
+///
+/// # Example
+///
+/// ```
+/// let volume = calculate_starting_volume("2.0", "3.0", "4.0");
+/// println!("Starting Volume: {}", volume);
+/// ```
 fn calculate_starting_volume(major: &str, minor: &str, subminor: &str) -> f64 {
     let major = major.parse::<f64>().unwrap_or_default();
     let minor = minor.parse::<f64>().unwrap_or_default();
@@ -28,6 +48,25 @@ fn calculate_starting_volume(major: &str, minor: &str, subminor: &str) -> f64 {
     (4.0 / 3.0) * PI * major * minor * subminor
 }
 
+/// Calculate the average diameter based on major, minor, and subminor dimensions.
+///
+/// # Arguments
+///
+/// * `major` - The major dimension of the ellipsoid.
+/// * `minor` - The minor dimension of the ellipsoid.
+/// * `subminor` - The subminor dimension of the ellipsoid.
+///
+/// # Returns
+///
+/// Returns the calculated average diameter using the formula:
+/// `Avg Diameter = (major + minor + subminor) / 3`.
+///
+/// # Example
+///
+/// ```
+/// let avg_diameter = calculate_avg_diameter("2.0", "3.0", "4.0");
+/// println!("Average Diameter: {}", avg_diameter);
+/// ```
 fn calculate_avg_diameter(major: &str, minor: &str, subminor: &str) -> f64 {
     let major = major.parse::<f64>().unwrap_or_default();
     let minor = minor.parse::<f64>().unwrap_or_default();
@@ -41,11 +80,43 @@ fn main() -> Result<(), Box<dyn Error>> {
     seed_database()
 }
 
+/// Seed the PostgreSQL database with data from a CSV file.
+///
+/// # Errors
+///
+/// Returns a `Result` indicating success or an error encountered during the process.
+///
+/// # Example
+///
+/// ```
+/// use std::error::Error;
+///
+/// fn main() -> Result<(), Box<dyn Error>> {
+///     // Load environment variables from .env file
+///     dotenv().ok();
+///     // Call the seed_database function to populate the database
+///     seed_database()
+/// }
+/// ```
 fn seed_database() -> Result<(), Box<dyn Error>> {
     let file = File::open("./fruit_data_takehome.csv")?;
     let mut rdr = ReaderBuilder::new().has_headers(true).from_reader(file);
-    let database_url = env::var("DATABASE_URL").unwrap_or_else(|_| DATABASE_URL_DEFAULT.to_string());
+    let database_url = env::var("DB_URL").unwrap_or_else(|_| DB_URL_DEFAULT.to_string());
+    println!("{:?}", database_url);
     let mut client = Client::connect(&database_url, NoTls)?;
+
+    client.batch_execute("
+        DROP TABLE IF EXISTS scans;
+        CREATE TABLE scans (
+            id SERIAL PRIMARY KEY,
+            location POINT,
+            major_mm DECIMAL(14, 3) NOT NULL,
+            minor_mm DECIMAL(14, 3) NOT NULL,
+            subminor_mm DECIMAL(14, 3) NOT NULL,
+            avg_diameter DECIMAL(14, 3),
+            volume DECIMAL(14, 3)
+        );
+    ")?;
 
     for result in rdr.records() {
         let record = result?;

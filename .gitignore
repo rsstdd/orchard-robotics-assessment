@@ -223,3 +223,6 @@ cython_debug/
 *.un~
 Session.vim
 .netrwhist
+
+# Security Key - for now
+key.json
