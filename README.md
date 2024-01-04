@@ -66,27 +66,6 @@ This data should be displayed on the frontend in a histogram format to the user 
 
 ***Bonus Points: It is always great to see advanced design elements, great UI/UX, and functionality extending this core challenge. We encourage you to be creative and take agency in developing extensions to this app you think might be fun/useful/aesthetically pleasing to users.***
 
-
-### Installing
-
-* How/where to download your program
-* Any modifications needed to be made to files/folders
-
-### Executing program
-
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
-
-## Help
-
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
-
 ## Authors
 
 Contributors names and contact info
