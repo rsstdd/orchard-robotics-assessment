@@ -1,6 +1,5 @@
 "use client"
 
-import { MagnifyingGlassCircleIcon } from "@heroicons/react/16/solid";
 import Slider from '@mui/material-next/Slider';
 import {
   Button,
@@ -14,8 +13,9 @@ import {
 import { ChangeEvent, useState } from "react";
 import { calculateDayDelta } from "../util";
 import Histogram, { GrowthPredictionData, GrowthPredictionDataResponse } from './histogram';
+import Intro from "./intro";
 
-export default function PageContent() {
+const PageContent = () => {
   const FRUIT_DIAMETER_MIN = 20;
   const FRUIT_DIAMETER_MAX = 120;
   let d = new Date();
@@ -64,7 +64,7 @@ export default function PageContent() {
   }
 
   const handleSetFruitGrowthRate = (e: ChangeEvent<HTMLInputElement>) => {
-    setFruitGrowthRate(parseFloat(e.target.value) ?? 100)
+    setFruitGrowthRate(parseFloat(e.target.value) ?? 0)
   }
 
   const handleSubmit = async (): Promise<void> => {
@@ -78,10 +78,8 @@ export default function PageContent() {
       const delta = `delta=${calculateDayDelta(from, to)}`;
       const growth = `growth=${fruitGrowthRate}`;
       const diameter = `diameter=${fruitDiameter[0]},${fruitDiameter[1]}`;
-
       const qs = `?${delta}&${growth}&${diameter}`;
-      const url = `http://localhost:8080/api/scans${qs}`;
-      console.log(url)
+      const url = `${process.env.BASE_URL}/api/scans${qs}`;
       const res = await fetch(url);
 
       if (!res.ok) {
@@ -98,6 +96,7 @@ export default function PageContent() {
 
   return (
     <section>
+      <Intro />
       <Card className="mt-8">
         <Text className="">Scan Date - Harvest Date</Text>
         <DateRangePicker
@@ -155,7 +154,6 @@ export default function PageContent() {
         </Flex>
         <Button
           className="mt-4"
-          icon={MagnifyingGlassCircleIcon}
           variant="secondary"
           onClick={handleSubmit}
         >
@@ -170,3 +168,5 @@ export default function PageContent() {
     </section>
   );
 }
+
+export default PageContent

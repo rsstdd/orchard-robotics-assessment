@@ -43,3 +43,13 @@ pnpm dev
 You should now be able to access the application at http://localhost:3000.
 
 
+### Production Deployment
+
+```
+gcloud builds submit --tag gcr.io/carbide-pilot-410123/or-client .
+gcloud beta run deploy demo-app --image gcr.io/carbide-pilot-410123/or-client --region us-central1 --platform managed --allow-unauthenticated --quiet
+```
+
+## Deploy to Google Cloud Run
+
+[![Run on Google Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run)

@@ -11,20 +11,20 @@ export const metadata = {
     rate, this tool calculates the expected volume of fruit.`
 };
 
-export default function RootLayout({
+const RootLayout = ({
   children
 }: {
   children: React.ReactNode;
-}) {
-  return (
-    <html lang="en" className="h-full bg-gray-50">
-      <body className="h-full">
-        <Suspense>
-          <Nav />
-        </Suspense>
-        {children}
-        <Analytics />
-      </body>
-    </html>
-  );
-}
+}) => (
+  <html lang="en" className="h-full bg-gray-50" suppressHydrationWarning={true}>
+    <body className="h-full">
+      <Suspense>
+        <Nav />
+      </Suspense>
+      {children}
+      <Analytics />
+    </body>
+  </html>
+);
+
+export default RootLayout

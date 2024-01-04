@@ -1,5 +1,7 @@
 import Navbar from './navbar';
 
-export default async function Nav() {
+const Nav = () => {
   return <Navbar />;
 }
+
+export default Nav
