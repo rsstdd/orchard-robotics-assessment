@@ -23,7 +23,7 @@ const PageContent = () => {
   d.setMonth(d.getMonth() - 3);
   const [dateRangeValue, setDateRangeValue] = useState<DateRangePickerValue>();
   const [fruitDiameter, setFruitDiameter] = useState<number[]>([FRUIT_DIAMETER_MIN, FRUIT_DIAMETER_MAX])
-  const [fruitGrowthRate, setFruitGrowthRate] = useState<number>(0)
+  const [fruitGrowthRate, setFruitGrowthRate] = useState<number>(1)
   const [histogramData, setHistogramData] = useState<GrowthPredictionData>()
   const [calendarError, setCalendarError] = useState(false)
   const [isFetching, setIsFetching] = useState(false)
@@ -89,25 +89,19 @@ const PageContent = () => {
       const diameter = `diameter=${fruitDiameter[0]},${fruitDiameter[1]}`;
       const qs = `?${delta}&${growth}&${diameter}`;
 
-      console.log(process.env.base_URL)
-      const res = await fetch(`${process.env.BASE_URL}/api/scans${qs}`, {
-        mode: 'cors',
-      });
-
-      console.log(res)
+      const res = await fetch(`${process.env.BASE_URL}/api/scans${qs}`)
 
       if (!res.ok) {
         throw new Error(`Failed to fetch. Status: ${res}`);
       }
-
-      const data = await res.json();
-      const transformedToArrays = data.map(({ location, volume }: GrowthPredictionDataResponse) => [location, volume]);
+      const { data = [] } = await res.json();
+      const transformedToArrays = data?.map(({ location, volume }: GrowthPredictionDataResponse) => [location, volume]);
       setHistogramData(transformedToArrays);
       setIsFetching(false)
     } catch (error) {
       setIsFetching(false)
       setError(true)
-      console.error('Error:', (error as Error));
+      console.error('Error:', (error) as Error);
     }
   };
 
@@ -136,9 +130,9 @@ const PageContent = () => {
           placeholder="Enter Growth Rate"
           className="mt-2"
           onChange={handleSetFruitGrowthRate}
-          // display placeholder if value > 0, the default value
-          value={fruitGrowthRate > 0 ? fruitGrowthRate : undefined}
-          min={0}
+          value={fruitGrowthRate}
+          step={10}
+          min={1}
           max={10000}
         />
 
@@ -174,6 +168,8 @@ const PageContent = () => {
             onChange={handleSetFruitDiameterMax}
           />
         </Flex>
+
+
         <Button
           className="mt-4"
           variant="secondary"
@@ -183,6 +179,16 @@ const PageContent = () => {
           Submit
         </Button>
       </Card >
+      {
+        isFetching
+          ? (
+            <Card className='mt-8 flex items-center justify-center'>
+              <div
+                className="w-12 h-12 rounded-full animate-spin border-2 border-solid border-blue-500 border-t-transparent"
+              />
+            </Card>)
+          : null
+      }
       {
         histogramData?.length && histogramData?.length > 0
           ? <Histogram growthPredictionData={histogramData} />
