@@ -79,11 +79,13 @@ const PageContent = () => {
       const growth = `growth=${fruitGrowthRate}`;
       const diameter = `diameter=${fruitDiameter[0]},${fruitDiameter[1]}`;
       const qs = `?${delta}&${growth}&${diameter}`;
-      const url = `${process.env.BASE_URL}/api/scans${qs}`;
-      const res = await fetch(url);
+
+      const res = await fetch(`${process.env.BASE_URL}/api/scans${qs}`);
+
+      console.log(res)
 
       if (!res.ok) {
-        throw new Error(`Failed to fetch. Status: ${res.status}`);
+        throw new Error(`Failed to fetch. Status: ${res}`);
       }
 
       const data = await res.json();
