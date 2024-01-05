@@ -5,7 +5,7 @@ Orchard Robotics Take-Home coding challenge - building an end-to-end web applica
 ### Part 1 – [Creating SQL database](./db/README.md)
 ---
 
-Create a SQL database hosted on the internet, preferably using Google Cloud Cloud SQL. Load fruit data from a spreadsheet and structure the SQL database as you see fit. Document and explain the database structure choices.
+Create a SQL database hosted on the internet, preferably using Google Cloud Cloud SQL. Load fruit data from a spreadsheet and structure the SQL database as you see fit. [Document and explain the database structure choices](#db).
 
 ### Part 2 – [Flask Backend](./server/README.md)
 ---
@@ -26,6 +26,8 @@ This frontend should contain a couple components:
   b. The min/max bounds for this should be 20mm to 120mm
 4. A “submit” button to calculate results
 5. The ability to display a histogram graph, either as an interactive component or as a static image of a histogram graph
+
+[See Conclusion/Client](#client)
 
 
 ### Part 4 – Functionality
