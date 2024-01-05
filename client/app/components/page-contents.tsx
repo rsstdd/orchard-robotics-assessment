@@ -1,6 +1,9 @@
-"use client"
+"use client";
 
-import Slider from '@mui/material-next/Slider';
+import cn from "classnames";
+import { ChangeEvent, useState } from "react";
+
+import Slider from "@mui/material-next/Slider";
 import {
   Button,
   Card,
@@ -9,16 +12,19 @@ import {
   Flex,
   NumberInput,
   Text
-} from '@tremor/react';
-import cn from 'classnames';
-import { ChangeEvent, useState } from "react";
+} from "@tremor/react";
+
 import { calculateDayDelta } from "../util";
-import Histogram, { GrowthPredictionData, GrowthPredictionDataResponse } from './histogram';
+import Histogram, {
+  GrowthPredictionData,
+  GrowthPredictionDataResponse,
+} from "./histogram";
 import Intro from "./intro";
 
+const FRUIT_DIAMETER_MIN = 20;
+const FRUIT_DIAMETER_MAX = 120;
+
 const PageContent = () => {
-  const FRUIT_DIAMETER_MIN = 20;
-  const FRUIT_DIAMETER_MAX = 120;
   let d = new Date();
   d.setMonth(d.getMonth() - 3);
   const [dateRangeValue, setDateRangeValue] = useState<DateRangePickerValue>();
@@ -168,8 +174,6 @@ const PageContent = () => {
             onChange={handleSetFruitDiameterMax}
           />
         </Flex>
-
-
         <Button
           className="mt-4"
           variant="secondary"
@@ -179,32 +183,21 @@ const PageContent = () => {
           Submit
         </Button>
       </Card >
-      {
-        isFetching
-          ? (
-            <Card className='mt-8 flex items-center justify-center'>
-              <div
-                className="w-12 h-12 rounded-full animate-spin border-2 border-solid border-blue-500 border-t-transparent"
-              />
-            </Card>)
-          : null
-      }
-      {
-        histogramData?.length && histogramData?.length > 0
-          ? <Histogram growthPredictionData={histogramData} />
-          : null
-      }
-      {
-        error ? (
-          <Card className='mt-8'>
-            <Text className="text-red-900 center">
-              There was an error processessing your request. Please try
-              again later.
-            </Text>
-          </Card>
-        )
-          : null
-      }
+      {isFetching ? (
+        <Card className="mt-8 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full animate-spin border-2 border-solid border-blue-500 border-t-transparent" />
+        </Card>
+      ) : null}
+      {histogramData?.length && histogramData?.length > 0 ? (
+        <Histogram growthPredictionData={histogramData} />
+      ) : null}
+      {error ? (
+        <Card className="mt-8">
+          <Text className="text-red-900 center">
+            There was an error processing your request. Please try again later.
+          </Text>
+        </Card>
+      ) : null}
     </>
   );
 }

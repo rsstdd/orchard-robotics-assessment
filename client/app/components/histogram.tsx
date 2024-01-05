@@ -18,12 +18,16 @@ interface GrowthPredictionProps {
 
 const Histogram = ({ growthPredictionData = [] }: GrowthPredictionProps) => {
   // Event listeners on graph slow page. Will kill page with enough data
-  const isHoverEnabled = growthPredictionData.length > 1000;
+  const isHoverEnabled = growthPredictionData.length > 500;
   const growthPredictionDataWithTitle: GrowthPredictionData = [
     ['lat / lng', 'volume'],
     ...growthPredictionData,
   ];
 
+  const smallDataOnlyOptions = {
+    enableInteractivity: false,
+    tooltip: { trigger: 'none' },
+  }
 
   return (
     <section>
@@ -35,10 +39,11 @@ const Histogram = ({ growthPredictionData = [] }: GrowthPredictionProps) => {
             height="400px"
             width="100%"
             options={{
-              title: 'Fruit Size Distribution, in millimeters',
+              async: true,
               legend: { position: 'bottom', maxLines: 2 },
+              title: 'Fruit Size Distribution, in millimeters',
               vAxis: { scaleType: 'mirrorLog' },
-              ...(isHoverEnabled && { tooltip: { trigger: 'none' } })
+              ...(isHoverEnabled && smallDataOnlyOptions)
             }}
           />
         </Card>
