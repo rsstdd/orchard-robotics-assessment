@@ -34,6 +34,7 @@ const PageContent = () => {
   const [calendarError, setCalendarError] = useState(false)
   const [isFetching, setIsFetching] = useState(false)
   const [error, setError] = useState(false)
+  const [didFetch, setDidFetch] = useState(false)
 
   const handleSetDateRangeValue = ({ from, to }: DateRangePickerValue) => {
     setCalendarError(false)
@@ -89,6 +90,8 @@ const PageContent = () => {
       }
 
       setIsFetching(true)
+      setDidFetch(true)
+
       const { from = new Date(), to = new Date() } = dateRangeValue
       const delta = `delta=${calculateDayDelta(from, to)}`;
       const growth = `growth=${fruitGrowthRate}`;
@@ -145,7 +148,7 @@ const PageContent = () => {
         <Text className="mt-8">
           Range of fruit diameter to include in growth prediction
         </Text>
-        <Flex className="mt-2">
+        <Flex className="flex-col md:flex-row mt-2">
           <NumberInput
             error={false}
             placeholder="Min Diameter"
@@ -183,21 +186,13 @@ const PageContent = () => {
           Submit
         </Button>
       </Card >
-      {isFetching ? (
-        <Card className="mt-8 flex items-center justify-center">
-          <div className="w-12 h-12 rounded-full animate-spin border-2 border-solid border-blue-500 border-t-transparent" />
-        </Card>
-      ) : null}
-      {histogramData?.length && histogramData?.length > 0 ? (
-        <Histogram growthPredictionData={histogramData} />
-      ) : null}
       {error ? (
         <Card className="mt-8">
           <Text className="text-red-900 center">
             There was an error processing your request. Please try again later.
           </Text>
         </Card>
-      ) : null}
+      ) : <Histogram growthPredictionData={histogramData} isFetching={isFetching} didFetch={didFetch} />}
     </>
   );
 }

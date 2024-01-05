@@ -6,6 +6,46 @@ Orchard Robotics Take-Home coding challenge - building an end-to-end web applica
 2. [NEXTjs Client](https://client-service-d4kjq3uwba-uw.a.run.app/)
 3. [Flask API](https://server-d4kjq3uwba-uc.a.run.app/health)
 
+
+## Overview
+---
+
+```
+ ┌───────────────┐
+ │               │
+ │  Web Browser  │
+ │               │
+ └───────┬───────┘
+         │
+         ▼
+┌─────────────────┐          ┌────────────────────┐
+│                 │          │                    │
+│ React Frontend  │◄─────────┤   Flask Backend    │
+│  (Cloud Run)    │          │   (Cloud Run)      │
+└─────────────────┘          └────────────────────┘
+                                      │
+                                      │
+                          Public IP (For Now - will change to VPC)
+                                      |
+                                      ▼
+                             ┌──────────────────────┐
+                             │                      │
+                             │ Google Cloud SQL DB  │
+                             │                      │
+                             └──────────────────────┘
+                                      │
+                              DB Repo mini ETL to GCP SQL
+                                      │
+                                      ▼
+                              ┌───────────────┐
+                              │               │
+                              │      DB       │
+                              │               │
+                              └───────────────┘
+
+```
+
+
 ### Part 1 – [Creating SQL database](./db/README.md)
 ---
 
