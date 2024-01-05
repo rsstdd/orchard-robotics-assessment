@@ -21,8 +21,8 @@ interface GrowthPredictionProps {
 const Histogram = ({ growthPredictionData = [], isFetching = false, didFetch = false }: GrowthPredictionProps) => {
   // Event listeners on graph slow page. Will kill page with enough data
   const noResultsMsgStr = didFetch && growthPredictionData?.length > 0
-    ? ''
-    : 'The query did not produce any results'
+    ? 'The query did not produce any results'
+    : ''
   const isLargeData = growthPredictionData.length > 50000;
   const growthPredictionDataWithTitle: GrowthPredictionData = [
     ['lat / lng', 'volume'],

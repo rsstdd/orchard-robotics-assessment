@@ -122,7 +122,7 @@ const PageContent = () => {
         <DateRangePicker
           className="mt-2"
           onValueChange={handleSetDateRangeValue}
-          placeholder="Scan - Harvest Sates"
+          placeholder="Scan - Harvest Dates"
           selectPlaceholder="Quick Select"
           value={dateRangeValue}
           color={'red'}
