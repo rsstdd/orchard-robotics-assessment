@@ -89,9 +89,9 @@ const PageContent = () => {
       const diameter = `diameter=${fruitDiameter[0]},${fruitDiameter[1]}`;
       const qs = `?${delta}&${growth}&${diameter}`;
 
+      console.log(process.env.base_URL)
       const res = await fetch(`${process.env.BASE_URL}/api/scans${qs}`, {
         mode: 'cors',
-        credentials: 'include'
       });
 
       console.log(res)
@@ -107,12 +107,12 @@ const PageContent = () => {
     } catch (error) {
       setIsFetching(false)
       setError(true)
-      console.error('Error:', (error as Error).message);
+      console.error('Error:', (error as Error));
     }
   };
 
   return (
-    <section>
+    <>
       <Intro />
       <Card className="mt-8">
         <Text className="">Scan Date - Harvest Date</Text>
@@ -189,12 +189,17 @@ const PageContent = () => {
           : null
       }
       {
-        error
-          ? <text>There was an error processessing your request. Please try
-            again later.</text>
+        error ? (
+          <Card className='mt-8'>
+            <Text className="text-red-900 center">
+              There was an error processessing your request. Please try
+              again later.
+            </Text>
+          </Card>
+        )
           : null
       }
-    </section >
+    </>
   );
 }
 
