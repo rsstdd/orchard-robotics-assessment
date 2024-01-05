@@ -88,7 +88,7 @@ def scans():
         projected_growth = decimal.Decimal(date_delta) * decimal.Decimal(growth_rate)
 
         # Validate input values
-        if date_delta <= 0 or growth_rate <= 0 or min_avg_size >= max_avg_size:
+        if date_delta <= 0 or min_avg_size >= max_avg_size:
             raise ValueError("Invalid input values")
 
         sql = """
