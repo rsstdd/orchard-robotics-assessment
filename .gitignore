@@ -226,3 +226,5 @@ Session.vim
 
 # Security Key - for now
 key.json
+infra
+cloud-sql-proxy
