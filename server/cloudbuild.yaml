@@ -1,8 +1,7 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
   script: |
-    docker build -t us-west2-docker.pkg.dev/carbide-pilot-410123/or-server/server:tag1 .
+    docker build -t us-west2-docker.pkg.dev/$PROJECT_ID/or-server/server:latest .
   automapSubstitutions: true
 images:
-- 'us-west2-docker.pkg.dev/carbide-pilot-410123/or-server/server:tag1'
-
+- 'us-west2-docker.pkg.dev/#PROJECT_ID/or-server/server:latest'
