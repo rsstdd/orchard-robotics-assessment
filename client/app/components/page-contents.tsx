@@ -140,8 +140,7 @@ const PageContent = () => {
           className="mt-2"
           onChange={handleSetFruitGrowthRate}
           value={fruitGrowthRate}
-          step={10}
-          min={1}
+          min={0}
           max={10000}
         />
 

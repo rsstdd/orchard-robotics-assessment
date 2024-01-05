@@ -1,6 +1,6 @@
 'use client';
 
-import { Card } from '@tremor/react';
+import { Card, Text } from '@tremor/react';
 import { Chart } from 'react-google-charts';
 
 export type GrowthPredictionDataResponse = {
@@ -21,7 +21,7 @@ interface GrowthPredictionProps {
 const Histogram = ({ growthPredictionData = [], isFetching = false, didFetch = false }: GrowthPredictionProps) => {
   // Event listeners on graph slow page. Will kill page with enough data
   const noResultsMsgStr = didFetch && growthPredictionData?.length > 0
-    ? 'The query did not produce any results'
+    ? ''
     : ''
   const isLargeData = growthPredictionData.length > 50000;
   const growthPredictionDataWithTitle: GrowthPredictionData = [
@@ -34,13 +34,22 @@ const Histogram = ({ growthPredictionData = [], isFetching = false, didFetch = f
     tooltip: { trigger: 'none' },
   }
 
+  console.log(noResultsMsgStr.length)
+
   return (
     <section>
-      <Card className="mt-8 flex items-center justify-center">
-        {isFetching ? (
+      {didFetch && growthPredictionData?.length > 0 ? (
+        <Card className="mt-8 flex items-center justify-center">
+          <Text>The query did not produce any results</Text>
+        </Card>
+      ) : null}
+      {isFetching ? (
+        <Card className="mt-8 flex items-center justify-center">
           <div className="w-12 h-12 rounded-full animate-spin border-2 border-solid border-blue-500 border-t-transparent" />
-        ) : (
-          growthPredictionData.length > 0 ? (
+        </Card>
+      ) : (
+        growthPredictionData.length > 0 ? (
+          <Card className="mt-8 flex items-center justify-center">
             <Chart
               chartType="Histogram"
               data={growthPredictionDataWithTitle}
@@ -53,12 +62,9 @@ const Histogram = ({ growthPredictionData = [], isFetching = false, didFetch = f
                 ...(isLargeData && smallDataOnlyOptions),
               }}
             />
-          ) : (
-            <p>{noResultsMsgStr}</p>
-          )
-        )}
-      </Card>
-    </section>
+          </Card>
+        ) : null)}
+    </section >
   );
 };
 
