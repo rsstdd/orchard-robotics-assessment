@@ -2,6 +2,10 @@
 
 Orchard Robotics Take-Home coding challenge - building an end-to-end web application capable of predicting a harvest size estimate, given the growth rate of the fruit.
 
+1. [GH Repo](https://github.com/rsstdd/orchard-robotics-assessment)
+2. [NEXTjs Client](https://client-service-d4kjq3uwba-uw.a.run.app/)
+3. [Flask API](https://server-d4kjq3uwba-uc.a.run.app/health)
+
 ### Part 1 – [Creating SQL database](./db/README.md)
 ---
 
