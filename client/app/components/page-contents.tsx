@@ -10,6 +10,7 @@ import {
   NumberInput,
   Text
 } from '@tremor/react';
+import cn from 'classnames';
 import { ChangeEvent, useState } from "react";
 import { calculateDayDelta } from "../util";
 import Histogram, { GrowthPredictionData, GrowthPredictionDataResponse } from './histogram';
@@ -24,8 +25,12 @@ const PageContent = () => {
   const [fruitDiameter, setFruitDiameter] = useState<number[]>([FRUIT_DIAMETER_MIN, FRUIT_DIAMETER_MAX])
   const [fruitGrowthRate, setFruitGrowthRate] = useState<number>(0)
   const [histogramData, setHistogramData] = useState<GrowthPredictionData>()
+  const [calendarError, setCalendarError] = useState(false)
+  const [isFetching, setIsFetching] = useState(false)
+  const [error, setError] = useState(false)
 
   const handleSetDateRangeValue = ({ from, to }: DateRangePickerValue) => {
+    setCalendarError(false)
     setDateRangeValue({ from, to })
   }
 
@@ -69,18 +74,25 @@ const PageContent = () => {
 
   const handleSubmit = async (): Promise<void> => {
     try {
+      setError(false)
+
       if (!dateRangeValue?.from && !dateRangeValue?.to) {
+        setCalendarError(true)
         console.error('Date range is not defined.');
         return;
       }
 
+      setIsFetching(true)
       const { from = new Date(), to = new Date() } = dateRangeValue
       const delta = `delta=${calculateDayDelta(from, to)}`;
       const growth = `growth=${fruitGrowthRate}`;
       const diameter = `diameter=${fruitDiameter[0]},${fruitDiameter[1]}`;
       const qs = `?${delta}&${growth}&${diameter}`;
 
-      const res = await fetch(`${process.env.BASE_URL}/api/scans${qs}`);
+      const res = await fetch(`${process.env.BASE_URL}/api/scans${qs}`, {
+        mode: 'cors',
+        credentials: 'include'
+      });
 
       console.log(res)
 
@@ -91,7 +103,10 @@ const PageContent = () => {
       const data = await res.json();
       const transformedToArrays = data.map(({ location, volume }: GrowthPredictionDataResponse) => [location, volume]);
       setHistogramData(transformedToArrays);
+      setIsFetching(false)
     } catch (error) {
+      setIsFetching(false)
+      setError(true)
       console.error('Error:', (error as Error).message);
     }
   };
@@ -107,7 +122,11 @@ const PageContent = () => {
           placeholder="Scan - Harvest Sates"
           selectPlaceholder="Quick Select"
           value={dateRangeValue}
+          color={'red'}
         />
+        <Text className={cn('text-red-900', { 'invisible': !calendarError })}>
+          Date Range is Required
+        </Text>
 
         <Text className="mt-4">
           Predicted fruit growth rate in cubic millimeters per day
@@ -117,12 +136,13 @@ const PageContent = () => {
           placeholder="Enter Growth Rate"
           className="mt-2"
           onChange={handleSetFruitGrowthRate}
-          value={fruitGrowthRate}
+          // display placeholder if value > 0, the default value
+          value={fruitGrowthRate > 0 ? fruitGrowthRate : undefined}
           min={0}
           max={10000}
         />
 
-        <Text className="mt-4">
+        <Text className="mt-8">
           Range of fruit diameter to include in growth prediction
         </Text>
         <Flex className="mt-2">
@@ -158,6 +178,7 @@ const PageContent = () => {
           className="mt-4"
           variant="secondary"
           onClick={handleSubmit}
+          disabled={isFetching || calendarError}
         >
           Submit
         </Button>
@@ -167,7 +188,13 @@ const PageContent = () => {
           ? <Histogram growthPredictionData={histogramData} />
           : null
       }
-    </section>
+      {
+        error
+          ? <text>There was an error processessing your request. Please try
+            again later.</text>
+          : null
+      }
+    </section >
   );
 }
 
