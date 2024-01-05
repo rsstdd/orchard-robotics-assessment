@@ -10,7 +10,6 @@ from psycopg2 import (
 from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
 
-
 app = Flask(__name__)
 
 health_status = True
@@ -31,17 +30,15 @@ load_dotenv()
 db_params = {
     'user': os.environ.get("DB_USERNAME"),
     'password': os.environ.get('DB_PASSWORD'),
-    'host': os.environ.get('DB_HOST'),
+    'host': os.environ.get('CLOUD_SQL_CONNECTION_NAME'),
     'port': os.environ.get("DB_PORT"),
     'dbname': os.environ.get("DB_NAME"),
     'sslmode': 'prefer',
 }
 
-max_connections = 5
-
 connection_pool = pool.SimpleConnectionPool(
     minconn=1,
-    maxconn=max_connections,
+    maxconn=5,
     **db_params
 )
 
@@ -57,7 +54,7 @@ def execute_query(sql, params=None):
         print(f"Error: {e}")
     finally:
         cursor.close()
-        conn.close()
+        connection_pool.putconn(conn)
 
 @app.route('/health')
 def health():
