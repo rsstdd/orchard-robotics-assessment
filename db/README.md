@@ -19,10 +19,10 @@ CREATE EXTENSION postgis;
 1. Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/your-repo.git
+gh repo clone rsstdd/orchard-robotics-assessment
 ```
 
-2. Navigate to the project directory:
+2. Navigate to the project directory
 3. Update the CSV file (e.g., your_modified_file.csv) with the scan data to import. Ensure the file includes columns for latitude, longitude, measurement values, and the scan date.
 4. Update PostgreSQL connection details via `.env` files. Reference `.env.template` for an example.
 5. Run the script:
