@@ -1,10 +1,15 @@
 import os
-from flask import Flask, jsonify,request
+import decimal
+
+from flask import Flask, jsonify, request
 from flask_cors import CORS
-import psycopg2
+from psycopg2 import (
+    OperationalError,
+    pool,
+)
 from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
-import decimal
+
 
 app = Flask(__name__)
 
@@ -26,19 +31,30 @@ load_dotenv()
 db_params = {
     'user': os.environ.get("DB_USERNAME"),
     'password': os.environ.get('DB_PASSWORD'),
-    'host': os.environ.get('INSTANCE_CONNECTION_NAME'),
+    'host': os.environ.get('DB_HOST'),
     'port': os.environ.get("DB_PORT"),
     'dbname': os.environ.get("DB_NAME"),
+    'sslmode': 'prefer',
 }
 
+max_connections = 5
+
+connection_pool = pool.SimpleConnectionPool(
+    minconn=1,
+    maxconn=max_connections,
+    **db_params
+)
+
 def execute_query(sql, params=None):
-    conn = psycopg2.connect(**db_params)
+    conn = connection_pool.getconn()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     try:
         cursor.execute(sql, params)
         results = cursor.fetchall()
         return results
+    except OperationalError as e:
+        print(f"Error: {e}")
     finally:
         cursor.close()
         conn.close()
