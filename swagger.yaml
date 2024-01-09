@@ -1,0 +1,225 @@
+openapi: 3.0.0
+info:
+  title: FruitScope API
+  version: 1.0.0
+  description: API for managing fruit data in the FruitScope application.
+  contact:
+    name: Your Name
+    email: your@email.com
+servers:
+  - url: http://api.fruitscope.com/v1
+paths:
+  /api/fruits/{fruit_id}:
+    get:
+      summary: Get Fruit Data
+      parameters:
+        - name: fruit_id
+          in: path
+          required: true
+          description: ID of the fruit to retrieve.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fruit'
+        '404':
+          description: Fruit not found.
+  /api/fruits:
+    get:
+      summary: Get All Fruits
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Fruit'
+    post:
+      summary: Create a Fruit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FruitInput'
+      responses:
+        '201':
+          description: Fruit created successfully.
+        '400':
+          description: Invalid request body.
+  /api/orchards:
+    get:
+      summary: Get All Orchards
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Orchard'
+  /api/orchards/compare:
+    get:
+      summary: Compare estimated harvest sizes and maturity levels between orchards.
+      responses:
+        '200':
+          description: Successful response with orchard comparison data.
+      tags:
+        - Comparative Queries
+  /api/fruits/compare_varieties:
+    get:
+      summary: Compare estimated harvest sizes and maturity levels between fruit varieties.
+      responses:
+        '200':
+          description: Successful response with fruit variety comparison data.
+      tags:
+        - Comparative Queries
+  /api/users:
+    get:
+      summary: Get All Users
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create a User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '201':
+          description: User created successfully.
+        '400':
+          description: Invalid request body.
+  /api/harvest-estimates:
+    get:
+      summary: Get All Harvest Estimates
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HarvestEstimate'
+components:
+  schemas:
+    Fruit:
+      type: object
+      properties:
+        id:
+          type: integer
+        orchard_id:
+          type: integer
+        client_id:
+          type: integer
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        major_axis:
+          type: number
+          format: double
+        minor_axis:
+          type: number
+          format: double
+        subminor_axis:
+          type: number
+          format: double
+        scan_date:
+          type: string
+          format: date
+        harvest_date:
+          type: string
+          format: date
+        growth_rate:
+          type: number
+          format: double
+    FruitInput:
+      type: object
+      properties:
+        orchard_id:
+          type: integer
+        client_id:
+          type: integer
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        major_axis:
+          type: number
+          format: double
+        minor_axis:
+          type: number
+          format: double
+        subminor_axis:
+          type: number
+          format: double
+        scan_date:
+          type: string
+          format: date
+        harvest_date:
+          type: string
+          format: date
+        growth_rate:
+          type: number
+          format: double
+    Orchard:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        location:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        password_hash:
+          type: string
+        orchard_id:
+          type: integer
+    UserInput:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        orchard_id:
+          type: integer
+    HarvestEstimate:
+      type: object
+      properties:
+        id:
+          type: integer
+        fruit_id:
+          type: integer
+        estimated_volume:
+          type: number
+          format: double

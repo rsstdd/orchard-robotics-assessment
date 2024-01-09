@@ -139,7 +139,7 @@ fn seed_database() -> Result<(), Box<dyn Error>> {
             ).to_string(),
         };
 
-        let sql = format!("INSERT INTO scans ( location, major_mm, minor_mm, subminor_mm, avg_diameter, volume) VALUES (POINT({}, {}), {}, {}, {}, {}, {})",
+        let sql = format!("INSERT INTO scans (location, major_mm, minor_mm, subminor_mm, avg_diameter, volume) VALUES (POINT({}, {}), {}, {}, {}, {}, {})",
             &scan.lat,
             &scan.lng,
             &scan.major_mm,

@@ -1,0 +1,108 @@
+openapi: 3.0.0
+info:
+  title: FruitScope API
+  description: API for managing orchard and fruit data.
+  version: 1.0.0
+servers:
+  - url: https://api.fruitscope.com/v1
+paths:
+  /fruits:
+    get:
+      summary: Get a list of fruits
+      description: Retrieve a list of all fruits in the database.
+      responses:
+        '200':
+          description: A list of fruits.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Fruit'
+    post:
+      summary: Create a new fruit
+      description: Create a new fruit entry in the database.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Fruit'
+      responses:
+        '201':
+          description: Fruit created successfully.
+        '400':
+          description: Bad request, invalid data.
+  /fruits/{fruitId}:
+    get:
+      summary: Get a specific fruit by ID
+      description: Retrieve details of a specific fruit by its ID.
+      parameters:
+        - in: path
+          name: fruitId
+          required: true
+          description: The ID of the fruit to retrieve.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Details of the specified fruit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fruit'
+        '404':
+          description: Fruit not found.
+    put:
+      summary: Update a specific fruit by ID
+      description: Update data for a specific fruit by its ID.
+      parameters:
+        - in: path
+          name: fruitId
+          required: true
+          description: The ID of the fruit to update.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Fruit'
+      responses:
+        '200':
+          description: Fruit updated successfully.
+        '404':
+          description: Fruit not found.
+    delete:
+      summary: Delete a specific fruit by ID
+      description: Delete a specific fruit entry by its ID.
+      parameters:
+        - in: path
+          name: fruitId
+          required: true
+          description: The ID of the fruit to delete.
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Fruit deleted successfully.
+        '404':
+          description: Fruit not found.
+components:
+  schemas:
+    Fruit:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the fruit.
+        name:
+          type: string
+          description: The name of the fruit.
+        color:
+          type: string
+          description: The color of the fruit.
+      required:
+        - name
+        - color
