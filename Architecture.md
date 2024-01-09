@@ -92,6 +92,7 @@
 - **Frontend:** The React-based web application that users interact with.
 - **Flask API:** The backend API built with Flask that handles user requests, communicates with the SQL database, and performs calculations.
 - **SQL Database:** The database where fruit data and relevant information are stored.
+  - See [./db/scan.sql](./db/scan.sql) for more details on the database schema and queries.
 - **Redis Cache:** A caching system to optimize and speed up data retrieval and reduce the load on the database.
   - *User Sessions:* Store user session data in Redis to manage user authentication and authorization efficiently. This can help speed up the process of verifying user access and permissions.
   - *Frequently Accessed Data:* Identify datasets that are frequently queried by users or the application. Caching this data in Redis can significantly reduce database queries, resulting in faster response times. For example, you might cache common fruit data, such as fruit names, types, or nutritional information.
