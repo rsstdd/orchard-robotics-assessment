@@ -43,6 +43,7 @@ CREATE TABLE Orchards (
 );
 
 -- Table for Users
+-- Example: Table for User Authentication and Authorization (if needed)
 CREATE TABLE Users (
   UserID INT PRIMARY KEY,
   Username VARCHAR(50) NOT NULL,
@@ -69,13 +70,14 @@ CREATE TABLE UserRolesMapping (
 );
 
 -- Example: Table for Predicted Harvest Size Estimates (Scoped to Orchard)
-CREATE TABLE HarvestEstimates (
-  EstimateID INT PRIMARY KEY,
-  FruitID INT NOT NULL,
-  EstimatedVolume DECIMAL(10, 2) NOT NULL,
+-- Pre-Calculated Analytics Data
+CREATE TABLE AnalyticsData (
+  DataID INT PRIMARY KEY,
+FruitID INT NOT NULL,
   OrchardID INT NOT NULL,
-  -- OrchardID to associate with the estimate
-  -- Other estimate-related attributes
+MaturityLevel DECIMAL(10, 2),
+EstimatedHarvestVolume DECIMAL(10, 2),
+-- Other analytics-related attributes
   FOREIGN KEY (FruitID) REFERENCES Fruits(FruitID),
   FOREIGN KEY (OrchardID) REFERENCES Orchards(OrchardID)
 );
@@ -105,20 +107,10 @@ CREATE INDEX idx_ScanDate ON Fruits (ScanDate);
 CREATE INDEX idx_HarvestDate ON Fruits (HarvestDate);
 CREATE INDEX idx_GrowthRate ON Fruits (GrowthRate);
 
--- Additional tables and relationships can be added as needed for advanced functionality.
--- Example: Table for Predicted Harvest Size Estimates
-CREATE TABLE HarvestEstimates (
-  EstimateID INT PRIMARY KEY,
-  FruitID INT NOT NULL,
-  EstimatedVolume DECIMAL(10, 2) NOT NULL,
-  -- Other estimate-related attributes
-  FOREIGN KEY (FruitID) REFERENCES Fruits(FruitID)
-);
+-- Indexes for Scans table
+CREATE INDEX idx_FruitID ON Scans (FruitID);
+CREATE INDEX idx_ScanDate ON Scans (ScanDate);
 
--- Example: Table for User Authentication and Authorization (if needed)
-CREATE TABLE Users (
-  UserID INT PRIMARY KEY,
-  Username VARCHAR(50) NOT NULL,
-  PasswordHash VARCHAR(255) NOT NULL,
-  -- Other user-related attributes
-);
+-- Indexes for AnalyticsData table
+CREATE INDEX idx_FruitID ON AnalyticsData (FruitID);
+CREATE INDEX idx_OrchardID ON AnalyticsData (OrchardID);
