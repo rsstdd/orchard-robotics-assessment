@@ -1,5 +1,6 @@
 # Potential High-Level Architecture
 
+```
                 +-----------------+
                 |   Data Source   |
                 |  (Cameras, AI)  |
@@ -37,11 +38,13 @@
                  |     Users    |
                  |   (Web UI)   |
                  +--------------+
+```
 
 ---
 
 # Main components of FruitScope:
 
+```
                      +-------------------------------------+
                      |                                     |
                      |    Frontend (React Application)     |
@@ -84,6 +87,7 @@
                           |   AI Model for Image Processing   |
                           |                                   |
                           +-----------------------------------+
+```
 
 - **Frontend:** The React-based web application that users interact with.
 - **Flask API:** The backend API built with Flask that handles user requests, communicates with the SQL database, and performs calculations.
@@ -100,8 +104,11 @@
 - **Cloud Storage:** A storage solution for storing images, data, or other assets.
 - **AI Model for Image Processing:** An AI model that processes images, performs object detection, and extracts data from scans.
 
+---
+
 ## Fruit Harvest Estimates
 
+```
   +-----------------+        +-----------------+        +-----------------+
   |    Data Source  |        |  Preprocessing  |        |    Data Store   |
   | (e.g., Cameras) |        | & Augmentation  |        |   (Database)    |
@@ -139,6 +146,7 @@
   |   & Reporting   |        |   (e.g., Dashboards,|        |    & Alerts     |
   |   (e.g., UI)    |        |    Charts, Reports) |        |                 |
   +-----------------+        +---------------------+        +-----------------+
+```
 
 ### Explanation of Key Components:
 - *Data Source:* This is where data is initially generated or collected, such as through cameras or sensors.
